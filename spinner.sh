@@ -1,31 +1,12 @@
 #!/bin/bash
 
-# Author: Tasos Latsas
+# Kanon added: prompt_spinner and clear_spinner.
 
-# spinner.sh
-#
-# Display an awesome 'spinner' while running your long shell commands
-#
-# Do *NOT* call _spinner function directly.
-# Use {start,stop}_spinner wrapper functions
-
-# usage:
-#   1. source this script in your's
-#   2. start the spinner:
-#       start_spinner [display-message-here]
-#   3. run your command
-#   4. stop the spinner:
-#       stop_spinner [your command's exit status]
-#		In other words: stop_spinner $?
-#
-# Also see: test.sh
-
-# Kanon added: prompt_spinner and clear_spinner, but these are defunct now. Just use the prompt_spinner function standalone in kav. Oh wait. Added clear_spinner back into kav for arch news.
-
-# Also added pre type spinner and tried to accommodate command output, but requires output to be saved in a string, then echoed. See: `updates`
-
+# Also added pre_spinner and tried to accommodate command output, but requires output to be saved in a string, then echoed. See: `updates`. 10/22/22-Not sure what this means anymore.
 
 function _spinner() {
+	# Do not call this function directly.
+	#
     # $1 start/stop
     #
     # on start: $2 display message
@@ -74,6 +55,7 @@ function _spinner() {
             done
             ;;
         prompt)
+			# 10/22/22-defunct. Just making standalone function for a prompt spinner.
             # display prompt
             echo -ne "${2} "  # space after because spinner does an initial \b
 
@@ -146,7 +128,8 @@ function stop_spinner {
     unset _sp_pid
 }
 
-function prompt_spinner {
+function prompt_spinner_donotuse {
+	# TODO: see if can get this to work. Currently mostly works but outputs a '0' when key is pressed.
     # $1 : msg to display
     _spinner "prompt" "${1}" &
     # set global spinner pid
@@ -154,6 +137,33 @@ function prompt_spinner {
     disown
 	read -n1 -rs
 	clear_spinner $?
+}
+
+function prompt_spinner {
+    # $1 : msg to display
+	# display prompt
+	{
+		echo -ne "${1} "  # space after because spinner does an initial \b
+
+		# start spinner
+		i=1
+		sp='\|/-'
+		delay=${SPINNER_DELAY:-0.15}  # Uses shell var if set, else .15
+
+		while :
+		do
+			printf "\b${sp:i++%${#sp}:1}"
+			sleep $delay
+		done
+	} &
+    # set global spinner pid
+    _sp_pid=$!
+    disown
+	read -n1 -rs
+	kill $_sp_pid > /dev/null 2>&1
+
+	# Erase prompt
+	echo -en "\e[0G\e[2K"
 }
 
 function clear_spinner {

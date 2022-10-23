@@ -11,6 +11,15 @@ sleep 1
 echo c
 stop_spinner $?
 
+pre_spinner 'Testing intermittent output with pre spinner (clear at end, not just stop)...'
+sleep 2
+echo a
+sleep 1.5
+echo b
+sleep 1
+echo c
+clear_spinner "done"
+
 # test success
 start_spinner 'sleeping for 2 secs...'
 sleep 2
