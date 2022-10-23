@@ -4,13 +4,15 @@ Display an awesome 'spinner' in bash scripts
 
 ## Usage
 
-  1. source spinner.sh in your script
+First, source `spinner.sh` in your script.
 
 ### For a long-running shell command:
 
+```
 start_spinner 'sleeping for 2 secs...'
 sleep 2  # put your command here instead
 stop_spinner $?
+```
 
 This will show "sleeping for 2 secs..." with the spinner to the right. When the command, in this case, `sleep 2` finishes, the spinner changes to a green [DONE] if it was successful, or a red [FAIL] if it wasn't.
 
