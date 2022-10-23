@@ -47,7 +47,7 @@ prompt_spinner "hi: "
 echo "Now, we go on..."
 ```
 
-### If user might hit ctrl-c:
+### Required for `prompt_spinner` to handle ctrl-c interrupt:
 
 ```
 # Used by prompt_spinner for when user hits ctrl-c. Exits like should but kills the spinner first.
