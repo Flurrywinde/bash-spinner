@@ -2,6 +2,15 @@
 
 source "$(pwd)/spinner.sh"
 
+pre_spinner 'Testing intermittent output with pre spinner...'
+sleep 2
+echo a
+sleep 1.5
+echo b
+sleep 1
+echo c
+stop_spinner $?
+
 # test success
 start_spinner 'sleeping for 2 secs...'
 sleep 2
