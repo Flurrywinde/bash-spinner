@@ -4,6 +4,10 @@
 
 # Also added pre_spinner and tried to accommodate command output, but requires output to be saved in a string, then echoed. See: `updates`. 10/22/22-Not sure what this means anymore.
 
+# Prepare spinner for possible interruption
+_sp_pid=''
+trap "killspin" SIGINT
+
 function _spinner() {
 	# Do not call this function directly.
 	#
@@ -164,10 +168,30 @@ function prompt_spinner {
 
 	# Erase prompt
 	echo -en "\e[0G\e[2K"
+
+	# Use /tmp/prompt_spinner_return_value.txt as return value (used by kav)
+	echo "$REPLY" > /tmp/prompt_spinner_return_value.txt
+}
+
+prompt_spinner_return() {
+	reply="$(head -n 1 /tmp/prompt_spinner_return_value.txt)"
+	reply="${reply//[ $'\t'$'\n']}"
+	echo "$reply"
 }
 
 function clear_spinner {
     # $1 : msg to display
     _spinner "clear" "$1" $_sp_pid
     unset _sp_pid
+}
+
+# Used by prompt_spinner for when user hits ctrl-c. Exits like should but kills the spinner first. (Without this, ctrl-c will leave a spinner behind even when back in shell.)
+killspin() {
+	if [ ! -z "$_sp_pid" ]; then
+		kill $_sp_pid > /dev/null 2>&1
+		#echo "$_sp_pid killed"
+	else
+		echo "No pid: $_sp_pid"
+	fi
+	exit
 }

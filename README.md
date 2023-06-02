@@ -47,23 +47,15 @@ prompt_spinner "hi: "
 echo "Now, we go on..."
 ```
 
-### Required for `prompt_spinner` to handle ctrl-c interrupt:
-
+#### Use the key the user pressed
 ```
-# Used by prompt_spinner for when user hits ctrl-c. Exits like should but kills the spinner first.
-killspin() {
-	if [ ! -z "$_sp_pid" ]; then
-		kill $_sp_pid > /dev/null 2>&1
-		#echo "$_sp_pid killed"
-	else
-		echo "No pid: $_sp_pid"
-	fi
-	exit
-}
-
-# Prepare spinner for possible interruption
-_sp_pid=''
-trap "killspin" SIGINT
+prompt_spinner "Hit any key: "
+userkey="$(prompt_spinner_return)"
+if [ -z "$userkey" ]; then
+	echo "You hit a whitespace key"
+else
+	echo "You hit: $userkey"
+fi
 ```
 
 ## Demos
