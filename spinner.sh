@@ -60,7 +60,8 @@ function _spinner() {
 			echo -en '\033[s'
             # start spinner
             i=1
-			sp=$(spinsel)
+			#sp=$(spinsel)
+			sp='\|/-'
             delay=${SPINNER_DELAY:-0.15}
 
             while :
@@ -80,7 +81,8 @@ function _spinner() {
 
             # start spinner
             i=1
-			sp=$(spinsel)
+			#sp=$(spinsel)
+			sp='\|/-'
             delay=${SPINNER_DELAY:-0.15}
 
             while :
@@ -96,7 +98,8 @@ function _spinner() {
 
             # start spinner
             i=1
-			sp=$(spinsel)
+			#sp=$(spinsel)
+			sp='\|/-'
             delay=${SPINNER_DELAY:-0.15}
 
             while :
